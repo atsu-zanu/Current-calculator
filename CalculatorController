@@ -1,0 +1,60 @@
+package com.example.currentcalculator;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+public class CalculatorController {
+    
+    @FXML
+    private TextField voltageField;
+    
+    @FXML
+    private TextField resistanceField;
+    
+    @FXML
+    private Label resultLabel;
+    
+    @FXML
+    private void calculateCurrent() {
+        try {
+            String voltageText = voltageField.getText().trim();
+            String resistanceText = resistanceField.getText().trim();
+            
+            if (voltageText.isEmpty() || resistanceText.isEmpty()) {
+                showAlert("Input Required", "Please enter both voltage and resistance");
+                return;
+            }
+            
+            double voltage = Double.parseDouble(voltageText);
+            double resistance = Double.parseDouble(resistanceText);
+            
+            if (resistance == 0) {
+                showAlert("Invalid Input", "Resistance cannot be zero");
+                return;
+            }
+            
+            double current = voltage / resistance;
+            resultLabel.setText(String.format("Current: %.4f A", current));
+            
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Number", "Please enter valid numbers only");
+        }
+    }
+    
+    @FXML
+    private void clearFields() {
+        voltageField.clear();
+        resistanceField.clear();
+        resultLabel.setText("Enter values above");
+    }
+    
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}
